@@ -1,0 +1,136 @@
+plugins {
+    id 'java-library'
+    id 'checkstyle'
+    id 'maven-publish'
+    id 'signing'
+    id 'groovy'
+    id "io.github.gradle-nexus.publish-plugin" version '1.1.0'
+    id "com.diffplug.spotless" version "5.14.2"
+}
+
+ext {
+    isReleaseVersion = !projectVersion.endsWith("SNAPSHOT")
+}
+
+group mavenGroup
+version projectVersion
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+
+    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation "io.micronaut:micronaut-runtime:$micronautVersion"
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-validation"
+
+    implementation "io.micronaut:micronaut-http-client"
+    testImplementation "io.projectreactor:reactor-core"
+
+    testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testImplementation "io.micronaut:micronaut-inject-groovy"
+    testImplementation "io.micronaut:micronaut-http-server-netty"
+    testImplementation platform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation("org.spockframework:spock-core") {
+        exclude module:'groovy-all'
+    }
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+Closure pomInfo = {
+    name = project.name
+    description = projectDesc
+    url = projectUrl
+    licenses {
+        license {
+            name = 'The Apache License, Version 2.0'
+            url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+        }
+    }
+    developers {
+        developer {
+            name = developerName
+            email = developerEmail
+            organization = organizationName
+            organizationUrl = organizationWebsite
+        }
+    }
+    scm {
+        connection = "scm:git:https://github.com/${githubOrg}/${githubRepo}.git"
+        developerConnection = "scm:git:https://github.com/${githubOrg}/${githubRepo}.git"
+        url = "https://github.com/${githubOrg}/${githubRepo}"
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = project.group
+            artifactId = project.name
+            version = project.version
+            from components.java
+            pom pomInfo
+        }
+    }
+    repositories {
+        maven {
+            url = isReleaseVersion ? 'https://s01.oss.sonatype.org/' : 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            credentials {
+                username System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
+                password System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+spotless {
+    java {
+        licenseHeaderFile("$rootDir/config/spotless.license.java")
+    }
+}
+
+afterEvaluate {
+    if (project.hasProperty('skipPublish') && project.skipPublish as boolean) {
+        tasks.named('generateMetadataFileForMavenJavaPublication') { it.enabled = false }
+        tasks.named('generatePomFileForMavenJavaPublication') { it.enabled = false }
+        tasks.named('publishMavenJavaPublicationToMavenLocal') { it.enabled = false }
+        tasks.named('signMavenJavaPublication') { it.enabled = false }
+        tasks.named('publishMavenJavaPublicationToMavenRepository') {it.enabled = false }
+        tasks.named('publishToMavenLocal') { it.enabled = false }
+        tasks.named('publish') { it.enabled = false }
+    }
+}
+
+
+nexusPublishing {
+    repositories {
+        sonatype {
+            username = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
+            password = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
+}
