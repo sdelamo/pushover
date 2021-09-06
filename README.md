@@ -160,7 +160,7 @@ It uses the plugins:
 - Make sure version ends with `-SNAPSHOT`
 - `./gradlew publish`
 
-### release:
+### release:
 
 - bump up version
 - Tag it. E.g. v1.0.0
