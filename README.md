@@ -147,7 +147,7 @@ Response result = Mono.from(application.send(user, message)).block()
 
 ## Build
 
-This library uses https://gradle.org[Gradle].
+This library uses [Gradle](https://gradle.org).
 
 It uses the plugins:
 
