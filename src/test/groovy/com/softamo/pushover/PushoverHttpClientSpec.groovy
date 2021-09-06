@@ -32,7 +32,7 @@ class PushoverHttpClientSpec extends Specification {
                 'pushover.http-client.url': "http://localhost:$mockPort"
         ])
 
-        User user = applicationContext.getBean(User, Qualifiers.byName("sdelamo"))
+        PushoverUser user = applicationContext.getBean(PushoverUser, Qualifiers.byName("sdelamo"))
         PushoverApplicationConfiguration applicationConfiguration = applicationContext.getBean(PushoverApplicationConfiguration, Qualifiers.byName("l3-37"))
         PushoverHttpClient httpClient = applicationContext.getBean(PushoverHttpClient)
         when:

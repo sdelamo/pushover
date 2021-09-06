@@ -20,7 +20,7 @@ import io.micronaut.core.naming.Named;
 /**
  * Pushover user.
  */
-public interface User extends Named {
+public interface PushoverUser extends Named {
     /**
      *
      * @return pushover user's key

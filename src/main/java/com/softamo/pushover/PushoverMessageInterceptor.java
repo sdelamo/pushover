@@ -46,15 +46,15 @@ class PushoverMessageInterceptor implements MethodInterceptor<Object, Object> {
     private static final String MEMBER_PRIORITY = "priority";
     private static final String MEMBER_SOUND = "sound";
     private static final String MEMBER_DEVICE = "device";
-    private final Map<String, User> usersByName = new ConcurrentHashMap<>();
+    private final Map<String, PushoverUser> usersByName = new ConcurrentHashMap<>();
     private final Map<String, PushoverApplication> applicationsByName = new ConcurrentHashMap<>();
     private final Scheduler scheduler;
 
     PushoverMessageInterceptor(@Named(TaskExecutors.IO) ExecutorService executorService,
-                               Collection<User> users,
+                               Collection<PushoverUser> users,
                                Collection<PushoverApplication> applications) {
         this.scheduler = Schedulers.fromExecutorService(executorService);
-        for (User user : users) {
+        for (PushoverUser user : users) {
             this.usersByName.put(user.getName(), user);
         }
         for (PushoverApplication application : applications) {
@@ -78,7 +78,7 @@ class PushoverMessageInterceptor implements MethodInterceptor<Object, Object> {
             if (application != null) {
                 if (userNameOptional.isPresent()) {
                     String userName = userNameOptional.get();
-                    User user = usersByName.get(userName);
+                    PushoverUser user = usersByName.get(userName);
                     if (user != null) {
                         Mono.from(application.send(user, createMessage(context, message)))
                                 .subscribeOn(scheduler)

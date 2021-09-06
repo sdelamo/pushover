@@ -42,7 +42,7 @@ public class PushoverApplication implements Named {
     }
 
     @NonNull
-    Publisher<Response> send(@NonNull @NotNull User user,
+    Publisher<Response> send(@NonNull @NotNull PushoverUser user,
                              @NonNull @NotNull @Valid Message message) {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Sending notification to user {} from App {} with contents {}", user.getName(), applicationConfiguration.getName(), message.toString());

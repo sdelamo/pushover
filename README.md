@@ -121,7 +121,7 @@ public class HomeController {
 You can use the library without a Micronaut Application Context. In that case, you can do:
 
 ```java
-User user = new User() {
+PushoverUser user = new PushoverUser() {
     @Override
     public String getKey() {
         return "s2HkfXVenEeMJ2MBwqDZrhAXpg7uzK";

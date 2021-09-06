@@ -10,7 +10,6 @@ import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Produces
-import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.runtime.server.EmbeddedServer
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
@@ -28,7 +27,7 @@ class ManualPushoverApplicationSpec extends Specification {
                 'micronaut.server.port': mockPort,
         ])
 
-        User user = new User() {
+        PushoverUser user = new PushoverUser() {
             @Override
             String getKey() {
                 's2HkfXVenEeMJ2MBwqDZrhAXpg7uzK'

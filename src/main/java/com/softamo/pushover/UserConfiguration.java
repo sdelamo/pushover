@@ -23,7 +23,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @EachProperty("pushover.users")
-public class UserConfiguration implements User {
+public class UserConfiguration implements PushoverUser {
 
     @NonNull
     @NotBlank
