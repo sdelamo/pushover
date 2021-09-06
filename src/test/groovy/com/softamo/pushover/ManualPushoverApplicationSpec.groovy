@@ -32,7 +32,7 @@ class ManualPushoverApplicationSpec extends Specification {
         PushoverApplication application = new PushoverApplication(() -> token,
                 new ManualPushoverHttpClient("http://localhost:$mockPort"))
         when:
-        Message message = new Message("Hello World")
+        Message message = Message.builder("Hello World").build()
         Response result = Mono.from(application.send(() -> user, message)).block()
 
         then:

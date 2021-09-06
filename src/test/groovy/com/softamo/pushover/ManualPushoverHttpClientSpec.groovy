@@ -32,7 +32,7 @@ class ManualPushoverHttpClientSpec extends Specification {
         String user = 's2HkfXVenEeMJ2MBwqDZrhAXpg7uzK'
         PushoverApi httpClient = new ManualPushoverHttpClient("http://localhost:$mockPort")
         when:
-        Message message = new Message("Hello World")
+        Message message = Message.builder("Hello World").build()
         Response result = Mono.from(httpClient.sendMessage(token, user, message)).block()
 
         then:

@@ -36,7 +36,7 @@ class PushoverHttpClientSpec extends Specification {
         PushoverApplicationConfiguration applicationConfiguration = applicationContext.getBean(PushoverApplicationConfiguration, Qualifiers.byName("l3-37"))
         PushoverHttpClient httpClient = applicationContext.getBean(PushoverHttpClient)
         when:
-        Message message = new Message("Hello World")
+        Message message = Message.builder("Hello World").build()
         Response result = Mono.from(httpClient.sendMessage(applicationConfiguration.getToken(), user.getKey(), message)).block()
 
         then:

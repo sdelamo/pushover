@@ -71,6 +71,15 @@ public class Message {
     }
 
     @Nullable
+    public Integer getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(@Nullable Integer timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    @Nullable
     public Sound getSound() {
         return sound;
     }
@@ -127,6 +136,54 @@ public class Message {
 
     public void setTitle(@Nullable String title) {
         this.title = title;
+    }
+
+    public static Builder builder(@NonNull String message) {
+        return new Builder(message);
+    }
+
+    public static class Builder {
+        Message message;
+
+        Builder(@NonNull String message) {
+            this.message = new Message(message);
+        }
+
+        public Builder timestamp(@Nullable Integer timestamp) {
+            message.setTimestamp(timestamp);
+            return this;
+        }
+
+        public Builder sound(@Nullable Sound sound) {
+            message.setSound(sound);
+            return this;
+        }
+
+        public Builder priority(@Nullable Priority priority) {
+            message.setPriority(priority);
+            return this;
+        }
+
+        public Builder title(@Nullable String title) {
+            message.setTitle(title);
+            return this;
+        }
+
+        public Builder device(@Nullable String device) {
+            message.setDevice(device);
+            return this;
+        }
+
+        public Builder url(@NonNull Url url) {
+            message.setUrl(url.getUrl());
+            message.setUrlTitle(url.getTitle());
+            return this;
+        }
+
+        @NonNull
+        public Message build() {
+            return message;
+        }
     }
 }
 

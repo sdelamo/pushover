@@ -43,7 +43,7 @@ Then you can send messages from an application to a user:
 ```java
 User user = applicationContext.getBean(User, Qualifiers.byName("sdelamo"))
 PushoverApplication application = applicationContext.getBean(PushoverApplication, Qualifiers.byName("l3-37"))
-Message message = new Message("Hello World");
+Message message = Message.builder("Hello World").build();
 application.send(user, message);
 ```
 
@@ -53,7 +53,7 @@ You can use the library without a Micronaut Application Context. In that case, y
 String token = 'T6xoNWc7zboEppeeM69tMZsCNkdRqU'
 String user = 's2HkfXVenEeMJ2MBwqDZrhAXpg7uzK'
 PushoverApplication application = new PushoverApplication(() -> token, new ManualPushoverHttpClient())
-Message message = new Message("Hello World")
+Message message = Message.builder("Hello World").build();
 Response result = Mono.from(application.send(() -> user, message)).block()
 ```
 

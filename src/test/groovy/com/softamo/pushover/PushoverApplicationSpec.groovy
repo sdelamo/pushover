@@ -37,7 +37,7 @@ class PushoverApplicationSpec extends Specification {
         PushoverApplication application = applicationContext.getBean(PushoverApplication, Qualifiers.byName("l3-37"))
 
         when:
-        Message message = new Message("Hello World")
+        Message message = Message.builder("Hello World").build();
         Response result = Mono.from(application.send(user, message)).block()
 
         then:
