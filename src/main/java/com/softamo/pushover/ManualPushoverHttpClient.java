@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ManualPushoverHttpClient implements PushoverApi {
-
     public static final String KEY_TOKEN = "token";
     public static final String KEY_USER = "user";
     public static final String KEY_MESSAGE = "message";

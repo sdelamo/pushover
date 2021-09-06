@@ -16,13 +16,16 @@
 package com.softamo.pushover;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.naming.Named;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-public class PushoverApplication {
-
+public class PushoverApplication implements Named {
+    private static final Logger LOG = LoggerFactory.getLogger(PushoverApplication.class);
     private final PushoverApplicationConfiguration applicationConfiguration;
     private final PushoverApi api;
 
@@ -32,7 +35,18 @@ public class PushoverApplication {
         this.api = api;
     }
 
-    Publisher<Response> send(@NonNull @NotNull User user, @NonNull @NotNull @Valid Message message) {
+    @Override
+    @NonNull
+    public String getName() {
+        return applicationConfiguration.getName();
+    }
+
+    @NonNull
+    Publisher<Response> send(@NonNull @NotNull User user,
+                             @NonNull @NotNull @Valid Message message) {
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("Sending notification to user {} from App {} with contents {}", user.getName(), applicationConfiguration.getName(), message.toString());
+        }
         return api.sendMessage(applicationConfiguration.getToken(), user.getKey(), message);
     }
 }

@@ -18,8 +18,9 @@ package com.softamo.pushover;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Introspected
 public class Message {
@@ -28,27 +29,32 @@ public class Message {
     private final String message;
 
     /**
-     * a title for your supplementary URL, otherwise just the URL is shown.
+     * A title for your supplementary URL, otherwise just the URL is shown.
      */
+    @Size(max = 100)
     @Nullable
     private String urlTitle;
 
     /**
-     * a supplementary URL to show with your message.
+     * A supplementary URL to show with your message.
      */
+    @Size(max = 512)
     @Nullable
     private String url;
 
     /**
      * your message's title, otherwise your app's name is used.
      */
+    @Size(max = 250)
     @Nullable
     private String title;
 
     /**
-     *  your user's device name to send the message directly to that device, rather than all of the user's devices (multiple devices may be separated by a comma).
+     *  User's device name to send the message directly to that device, rather than all of the user's devices (multiple devices may be separated by a comma).
      */
     @Nullable
+    @Size(max = 25)
+    @Pattern(regexp = "^[A-Za-z0-9]{0,25}$")
     private String device;
 
     @Nullable
@@ -136,6 +142,20 @@ public class Message {
 
     public void setTitle(@Nullable String title) {
         this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "message='" + message + '\'' +
+                ", urlTitle='" + urlTitle + '\'' +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", device='" + device + '\'' +
+                ", priority=" + (priority != null ? priority.getValue() : "null") +
+                ", sound=" + (sound != null ? sound.toString() : "null") +
+                ", timestamp=" + timestamp +
+                '}';
     }
 
     public static Builder builder(@NonNull String message) {

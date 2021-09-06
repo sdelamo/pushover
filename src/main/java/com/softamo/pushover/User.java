@@ -15,12 +15,12 @@
  */
 package com.softamo.pushover;
 
+import io.micronaut.core.naming.Named;
+
 /**
  * Pushover user.
  */
-@FunctionalInterface
-public interface User {
-
+public interface User extends Named {
     /**
      *
      * @return pushover user's key

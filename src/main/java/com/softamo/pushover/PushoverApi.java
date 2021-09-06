@@ -19,15 +19,15 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import org.reactivestreams.Publisher;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 public interface PushoverApi {
     String MESSAGES = "/1/messages.json";
-
     @NonNull
     default Publisher<Response> sendMessage(@NonNull @NotBlank String token,
                                             @NonNull @NotBlank String user,
-                                            @NonNull @NotBlank Message message) {
+                                            @NonNull @NotBlank @Valid Message message) {
         return sendMessage(token,
                 user,
                 message.getMessage(),

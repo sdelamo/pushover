@@ -16,6 +16,7 @@
 package com.softamo.pushover;
 
 import io.micronaut.context.annotation.EachProperty;
+import io.micronaut.context.annotation.Parameter;
 import io.micronaut.core.annotation.NonNull;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -29,6 +30,18 @@ public class UserConfiguration implements User {
     @Size(max = 30, min = 30)
     @Pattern(regexp = "^[A-Za-z0-9]{30,30}$")
     private String key;
+
+    private final String name;
+
+    public UserConfiguration(@Parameter String name) {
+        this.name = name;
+    }
+
+    @Override
+    @NonNull
+    public String getName() {
+        return this.name;
+    }
 
     @Override
     @NonNull

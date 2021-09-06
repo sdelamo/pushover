@@ -16,9 +16,9 @@
 package com.softamo.pushover;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.naming.Named;
 
-@FunctionalInterface
-public interface PushoverApplicationConfiguration {
+public interface PushoverApplicationConfiguration extends Named {
     @NonNull
     String getToken();
 }

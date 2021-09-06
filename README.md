@@ -9,11 +9,11 @@ This project is a Java library to consume the [Pushover API](https://pushover.ne
 
 ## Dependency snippet
 
-To use it with https://gradle.org[Gradle]:
+To use it with [Gradle](https://gradle.org):
 
 `implementation 'com.softamo:pushover:XXXX'`
 
-To use it with https://maven.apache.org[Maven]:
+To use it with [Maven](https://maven.apache.org):
 
 ```xml
 <dependency>
@@ -25,6 +25,8 @@ To use it with https://maven.apache.org[Maven]:
 ```
 
 ## Usage
+
+### Micronaut Applications
 
 If you want to use the library in Micronaut application, register applications and users via configuration: 
 
@@ -41,20 +43,106 @@ pushover:
 Then you can send messages from an application to a user:
 
 ```java
-User user = applicationContext.getBean(User, Qualifiers.byName("sdelamo"))
-PushoverApplication application = applicationContext.getBean(PushoverApplication, Qualifiers.byName("l3-37"))
-Message message = Message.builder("Hello World").build();
-application.send(user, message);
+@Controller
+public class HomeController {
+    private static final Logger LOG = LoggerFactory.getLogger(PushoverMessageInterceptor.class);
+    private final PushoverApplication application;
+    private final PushoverUser user;
+    private final Scheduler scheduler;
+
+    HomeController(@Named(TaskExecutors.IO) ExecutorService executorService,
+                   @Named("l3-37") PushoverApplication application,
+                   @Named("sdelamo") PushoverUser user) {
+        this.scheduler = Schedulers.fromExecutorService(executorService);
+        this.application = application;
+        this.user = user;
+    }
+    
+    @Get
+    @Produces(MediaType.TEXT_PLAIN)
+    String index() {
+        Message message = Message.builder("Hello World").sound(Sound.ALIEN).build();
+        Mono.from(application.send(user, message))
+                .subscribeOn(scheduler)
+                .subscribe(response -> {
+                    if (response.getStatus().equals(1)) {
+                        LOG.trace("your notification has been received and queued. Request {}", response.getRequest());
+                    }
+                });
+        return "Hello world";
+    }
+}
 ```
+
+Moreover, For Micronaut Application's you can annotate your methods with `@PushoverMessage`
+
+```java
+...
+..
+.
+@Controller
+public class HomeController {
+    @PushoverMessage(value = "User greeted",
+            url = "https://sergiodelamo.com",
+            sound = Sound.ALIEN,
+            appName = "l3-37"
+            userName = "sdelamo",
+            urlTitle = "blog")
+    @Get
+    @Produces(MediaType.TEXT_PLAIN)
+    String index() {
+        return "Hello world";
+    }
+}
+```
+
+If you have only one application and user configured, you can skip `appName` and `userName` members.
+
+```java
+...
+..
+.
+@Controller
+public class HomeController {
+    @PushoverMessage(value = "User greeted",
+            url = "https://sergiodelamo.com",
+            sound = Sound.ALIEN,
+            urlTitle = "blog")
+    @Get
+    @Produces(MediaType.TEXT_PLAIN)
+    String index() {
+        return "Hello world";
+    }
+}
+```
+
+### Without Micronaut
 
 You can use the library without a Micronaut Application Context. In that case, you can do:
 
 ```java
-String token = 'T6xoNWc7zboEppeeM69tMZsCNkdRqU'
-String user = 's2HkfXVenEeMJ2MBwqDZrhAXpg7uzK'
-PushoverApplication application = new PushoverApplication(() -> token, new ManualPushoverHttpClient())
-Message message = Message.builder("Hello World").build();
-Response result = Mono.from(application.send(() -> user, message)).block()
+User user = new User() {
+    @Override
+    public String getKey() {
+        return "s2HkfXVenEeMJ2MBwqDZrhAXpg7uzK";
+    }
+    @Override
+    public String getName() {
+        return "sdelamo";
+    }
+};
+PushoverApplication application = new PushoverApplication(new PushoverApplicationConfiguration() {
+    @Override
+    public String getToken() {
+        return "T6xoNWc7zboEppeeM69tMZsCNkdRqU";
+    }
+    @Override
+    public String getName() {
+        return "l3-37";
+    }
+},new ManualPushoverHttpClient()); 
+Message message = Message.builder("Hello World").sound(Sound.ALIEN).build();
+Response result = Mono.from(application.send(user, message)).block()
 ```
 
 ## Build
