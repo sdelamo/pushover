@@ -17,6 +17,7 @@ package com.softamo.pushover;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.async.annotation.SingleResult;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Post;
@@ -29,7 +30,8 @@ import javax.validation.constraints.NotBlank;
 
 @Client(
         value = "${" + PushoverHttpClientConfiguration.PREFIX + ".url:`" + PushoverHttpClientConfiguration.HOST_LIVE + "`}",
-        configuration = PushoverHttpClientConfiguration.class
+        configuration = PushoverHttpClientConfiguration.class,
+        errorType = PushoverResponse.class
 )
 @Retryable(
         attempts = "${" + PushoverHttpClientConfiguration.PREFIX + ".retry.attempts:0}",
@@ -41,6 +43,7 @@ public interface PushoverHttpClient extends PushoverApi {
     @Consumes(MediaType.APPLICATION_JSON)
     @Post(MESSAGES)
     @NonNull
+    @SingleResult
     Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
                                             @NonNull @NotBlank String user,
                                             @NonNull @NotBlank String message,

@@ -18,6 +18,7 @@ package com.softamo.pushover;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.type.Argument;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.client.HttpClient;
@@ -55,7 +56,9 @@ public class ManualPushoverHttpClient implements PushoverApi {
     private Publisher<PushoverResponse> sendMessage(Map<String, Object> body) {
         return httpClient.retrieve(HttpRequest.POST(MESSAGES, body)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON), PushoverResponse.class);
+                .accept(MediaType.APPLICATION_JSON),
+                Argument.of(PushoverResponse.class),
+                Argument.of(PushoverResponse.class));
     }
 
     @Override

@@ -80,6 +80,7 @@ public class PushoverResponse {
         return "PushoverResponse{" +
                 "status=" + status +
                 ", request='" + request + '\'' +
+                ", errors=" + errors +
                 '}';
     }
 }

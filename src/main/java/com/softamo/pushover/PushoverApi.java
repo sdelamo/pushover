@@ -17,6 +17,7 @@ package com.softamo.pushover;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.async.annotation.SingleResult;
 import org.reactivestreams.Publisher;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ import javax.validation.constraints.NotBlank;
 public interface PushoverApi {
     String MESSAGES = "/1/messages.json";
     @NonNull
+    @SingleResult
     default Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
                                                     @NonNull @NotBlank String user,
                                                     @NonNull @NotBlank @Valid Message message) {
@@ -39,6 +41,7 @@ public interface PushoverApi {
     }
 
     @NonNull
+    @SingleResult
     Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
                                             @NonNull @NotBlank String user,
                                             @NonNull @NotBlank String message,

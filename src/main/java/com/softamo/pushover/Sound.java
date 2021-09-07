@@ -43,6 +43,7 @@ public enum Sound {
     NONE("none");
 
     private final String value;
+
     Sound(String value) {
         this.value = value;
     }

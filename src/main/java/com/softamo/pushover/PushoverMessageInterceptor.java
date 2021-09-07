@@ -82,9 +82,17 @@ class PushoverMessageInterceptor implements MethodInterceptor<Object, Object> {
                     if (user != null) {
                         Mono.from(application.send(user, createMessage(context, message)))
                                 .subscribeOn(scheduler)
+                                .onErrorReturn(new PushoverResponse(0, "unknown"))
                                 .subscribe(response -> {
                                     if (response.getStatus().equals(1)) {
                                         LOG.trace("your notification has been received and queued. Request {}", response.getRequest());
+                                    } else {
+                                        if (LOG.isWarnEnabled()) {
+                                            LOG.warn("could not deliver notification. status: {} request: {} errors {}",
+                                                    response.getStatus(),
+                                                    response.getRequest(),
+                                                    response.getErrors() != null ? String.join(",", response.getErrors()) : "");
+                                        }
                                     }
                                 });
                     } else {

@@ -32,6 +32,9 @@ dependencies {
     implementation "io.micronaut:micronaut-http-client"
     implementation "io.projectreactor:reactor-core"
 
+    testImplementation("ch.qos.logback:logback-classic")
+
+
     testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     testAnnotationProcessor "io.micronaut:micronaut-inject-java"
     testImplementation "io.micronaut:micronaut-inject-groovy"

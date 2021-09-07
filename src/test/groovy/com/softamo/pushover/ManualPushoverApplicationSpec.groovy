@@ -40,6 +40,7 @@ class ManualPushoverApplicationSpec extends Specification {
         }
         PushoverApplication application = new PushoverApplication(new PushoverApplicationConfiguration() {
             @Override
+            @NonNull
             String getToken() {
                 'T6xoNWc7zboEppeeM69tMZsCNkdRqU'
             }
