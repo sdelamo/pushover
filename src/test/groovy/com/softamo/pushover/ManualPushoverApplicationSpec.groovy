@@ -52,7 +52,7 @@ class ManualPushoverApplicationSpec extends Specification {
 
         when:
         Message message = Message.builder("Hello World").build()
-        Response result = Mono.from(application.send(user, message)).block()
+        PushoverResponse result = Mono.from(application.send(user, message)).block()
 
         then:
         noExceptionThrown()
@@ -69,10 +69,10 @@ class ManualPushoverApplicationSpec extends Specification {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Post("/1/messages.json")
-        Publisher<Response> sendMessage(@NonNull @NotBlank String token,
+        PushoverResponse sendMessage(@NonNull @NotBlank String token,
                                         @NonNull @NotBlank String user,
                                         @NonNull @NotBlank String message) {
-            Publishers.just(new Response(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad"))
+            new PushoverResponse(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad")
         }
     }
 }

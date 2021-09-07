@@ -41,12 +41,12 @@ public interface PushoverHttpClient extends PushoverApi {
     @Consumes(MediaType.APPLICATION_JSON)
     @Post(MESSAGES)
     @NonNull
-    Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                    @NonNull @NotBlank String user,
-                                    @NonNull @NotBlank String message,
-                                    @Nullable String url,
-                                    @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
-                                    @Nullable String title,
-                                    @Nullable Integer priority,
-                                    @Nullable String sound);
+    Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                            @NonNull @NotBlank String user,
+                                            @NonNull @NotBlank String message,
+                                            @Nullable String url,
+                                            @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
+                                            @Nullable String title,
+                                            @Nullable Integer priority,
+                                            @Nullable String sound);
 }

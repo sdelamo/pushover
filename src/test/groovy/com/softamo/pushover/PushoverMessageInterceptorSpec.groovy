@@ -67,11 +67,11 @@ class PushoverMessageInterceptorSpec extends Specification {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Post("/1/messages.json")
-        Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                        @NonNull @NotBlank String user,
-                                        @NonNull @NotBlank String message) {
+        Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                                @NonNull @NotBlank String user,
+                                                @NonNull @NotBlank String message) {
             messages << message
-            Publishers.just(new Response(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad"))
+            Publishers.just(new PushoverResponse(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad"))
         }
     }
 }

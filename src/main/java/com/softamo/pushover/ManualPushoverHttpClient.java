@@ -52,22 +52,22 @@ public class ManualPushoverHttpClient implements PushoverApi {
     }
 
     @NonNull
-    private Publisher<Response> sendMessage(Map<String, Object> body) {
+    private Publisher<PushoverResponse> sendMessage(Map<String, Object> body) {
         return httpClient.retrieve(HttpRequest.POST(MESSAGES, body)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .accept(MediaType.APPLICATION_JSON), Response.class);
+                .accept(MediaType.APPLICATION_JSON), PushoverResponse.class);
     }
 
     @Override
     @NonNull
-    public Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                           @NonNull @NotBlank String user,
-                                           @NonNull @NotBlank String message,
-                                           @Nullable String url,
-                                           @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
-                                           @Nullable String title,
-                                           @Nullable Integer priority,
-                                           @Nullable String sound) {
+    public Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                                   @NonNull @NotBlank String user,
+                                                   @NonNull @NotBlank String message,
+                                                   @Nullable String url,
+                                                   @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
+                                                   @Nullable String title,
+                                                   @Nullable Integer priority,
+                                                   @Nullable String sound) {
         Map<String, Object> body = new HashMap<>();
         body.put(KEY_TOKEN, token);
         body.put(KEY_USER, user);

@@ -10,8 +10,6 @@ import io.micronaut.http.annotation.Consumes
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Post
 import io.micronaut.http.annotation.Produces
-import io.micronaut.http.client.exceptions.HttpClientResponseException
-import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
 import org.reactivestreams.Publisher
 import reactor.core.publisher.Mono
@@ -33,7 +31,7 @@ class ManualPushoverHttpClientSpec extends Specification {
         PushoverApi httpClient = new ManualPushoverHttpClient("http://localhost:$mockPort")
         when:
         Message message = Message.builder("Hello World").build()
-        Response result = Mono.from(httpClient.sendMessage(token, user, message)).block()
+        PushoverResponse result = Mono.from(httpClient.sendMessage(token, user, message)).block()
 
         then:
         noExceptionThrown()
@@ -50,10 +48,10 @@ class ManualPushoverHttpClientSpec extends Specification {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Post("/1/messages.json")
-        Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                        @NonNull @NotBlank String user,
-                                        @NonNull @NotBlank String message) {
-            Publishers.just(new Response(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad"))
+        Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                                @NonNull @NotBlank String user,
+                                                @NonNull @NotBlank String message) {
+            Publishers.just(new PushoverResponse(1, "aff2ff8c-5d98-4bf3-9424-0af69c9177ad"))
         }
     }
 }

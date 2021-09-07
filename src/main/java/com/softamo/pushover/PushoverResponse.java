@@ -18,11 +18,14 @@ package com.softamo.pushover;
 import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Introspected
-public class Response {
+public class PushoverResponse {
 
     @NonNull
     @NotNull
@@ -32,14 +35,26 @@ public class Response {
     @NotBlank
     private String request;
 
-    public Response() {
+    @Nullable
+    private List<String> errors;
+
+    public PushoverResponse() {
 
     }
 
     @Creator
-    public Response(@NonNull Integer status, @NonNull String request) {
+    public PushoverResponse(@NonNull Integer status, @NonNull String request) {
         this.status = status;
         this.request = request;
+    }
+
+    @Nullable
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(@Nullable List<String> errors) {
+        this.errors = errors;
     }
 
     @NonNull

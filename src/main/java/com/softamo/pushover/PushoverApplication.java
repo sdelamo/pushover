@@ -17,12 +17,18 @@ package com.softamo.pushover;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.naming.Named;
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class PushoverApplication implements Named {
     private static final Logger LOG = LoggerFactory.getLogger(PushoverApplication.class);
@@ -42,11 +48,15 @@ public class PushoverApplication implements Named {
     }
 
     @NonNull
-    Publisher<Response> send(@NonNull @NotNull PushoverUser user,
-                             @NonNull @NotNull @Valid Message message) {
+    Publisher<PushoverResponse> send(@NonNull @NotNull PushoverUser user,
+                                     @NonNull @NotNull @Valid Message message) {
         if (LOG.isTraceEnabled()) {
-            LOG.trace("Sending notification to user {} from App {} with contents {}", user.getName(), applicationConfiguration.getName(), message.toString());
+            LOG.trace("Sending notification to user {} from App {} with contents {}", user.getName(), applicationConfiguration.getName(), message);
         }
-        return api.sendMessage(applicationConfiguration.getToken(), user.getKey(), message);
+        return Mono.from(api.sendMessage(applicationConfiguration.getToken(), user.getKey(), message))
+                .onErrorResume(HttpClientResponseException.class, e ->
+                        e.getResponse().getBody(PushoverResponse.class)
+                                .map(Mono::just)
+                                .orElseGet(Mono::empty));
     }
 }

@@ -25,9 +25,9 @@ import javax.validation.constraints.NotBlank;
 public interface PushoverApi {
     String MESSAGES = "/1/messages.json";
     @NonNull
-    default Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                            @NonNull @NotBlank String user,
-                                            @NonNull @NotBlank @Valid Message message) {
+    default Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                                    @NonNull @NotBlank String user,
+                                                    @NonNull @NotBlank @Valid Message message) {
         return sendMessage(token,
                 user,
                 message.getMessage(),
@@ -39,12 +39,12 @@ public interface PushoverApi {
     }
 
     @NonNull
-    Publisher<Response> sendMessage(@NonNull @NotBlank String token,
-                                    @NonNull @NotBlank String user,
-                                    @NonNull @NotBlank String message,
-                                    @Nullable String url,
-                                    @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
-                                    @Nullable String title,
-                                    @Nullable Integer priority,
-                                    @Nullable String sound);
+    Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
+                                            @NonNull @NotBlank String user,
+                                            @NonNull @NotBlank String message,
+                                            @Nullable String url,
+                                            @SuppressWarnings("checkstyle:ParameterName") @Nullable String url_title,
+                                            @Nullable String title,
+                                            @Nullable Integer priority,
+                                            @Nullable String sound);
 }
