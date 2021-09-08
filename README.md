@@ -11,7 +11,7 @@ This project is a Java library to consume the [Pushover API](https://pushover.ne
 
 To use it with [Gradle](https://gradle.org):
 
-`implementation 'com.softamo:pushover:XXXX'`
+`implementation 'com.softamo:pushover:1.0.1'`
 
 To use it with [Maven](https://maven.apache.org):
 
@@ -19,10 +19,14 @@ To use it with [Maven](https://maven.apache.org):
 <dependency>
     <groupId>com.softamo</groupId>
     <artifactId>pushover</artifactId>
-    <version>xxx</version>
+    <version>1.0.1</version>
     <type>pom</type>
 </dependency>
 ```
+
+## Releases
+
+You can check the list of [releases](https://github.com/sdelamo/pushover/releases).
 
 ## Usage
 
@@ -82,6 +86,7 @@ Moreover, For Micronaut Application's you can annotate your methods with `@Pusho
 .
 @Controller
 public class HomeController {
+
     @PushoverMessage(value = "User greeted",
             url = "https://sergiodelamo.com",
             sound = Sound.ALIEN,
@@ -162,8 +167,9 @@ It uses the plugins:
 
 ### release:
 
-- bump up version
-- Tag it. E.g. v1.0.0
-- `./gradlew publishToSonatype closeSonatypeStagingRepository`
+- [ ] bump up version
+- [ ] Tag it. E.g. v1.0.0
+- [ ] `./gradlew publishToSonatype closeSonatypeStagingRepository`
+- [ ] Go to `https://s01.oss.sonatype.org/#stagingRepositories` and release repository.
+- [ ] Edit README and specify the version in the dependencies section. 
 
-Go to `https://s01.oss.sonatype.org/#stagingRepositories` and release repository.
