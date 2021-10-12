@@ -3,6 +3,7 @@ package com.softamo.pushover
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Requires
 import io.micronaut.core.annotation.NonNull
+import io.micronaut.core.async.annotation.SingleResult
 import io.micronaut.core.async.publisher.Publishers
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.http.MediaType
@@ -55,6 +56,7 @@ class PushoverHttpClientSpec extends Specification {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
         @Post("/1/messages.json")
+        @SingleResult
         Publisher<PushoverResponse> sendMessage(@NonNull @NotBlank String token,
                                                 @NonNull @NotBlank String user,
                                                 @NonNull @NotBlank String message) {
