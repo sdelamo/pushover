@@ -11,7 +11,7 @@ This project is a Java library to consume the [Pushover API](https://pushover.ne
 
 To use it with [Gradle](https://gradle.org):
 
-`implementation 'com.softamo:pushover:1.0.1'`
+`implementation 'com.softamo:pushover:1.1.0'`
 
 To use it with [Maven](https://maven.apache.org):
 
@@ -19,7 +19,7 @@ To use it with [Maven](https://maven.apache.org):
 <dependency>
     <groupId>com.softamo</groupId>
     <artifactId>pushover</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
     <type>pom</type>
 </dependency>
 ```
